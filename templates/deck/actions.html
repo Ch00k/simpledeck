@@ -1,0 +1,7 @@
+<form action="delete/{{ record.pk }}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <a class="btn btn-primary btn-sm" href="{% url 'preview' pk=record.pk %}" role="button">Preview</a>
+    <a class="btn btn-primary btn-sm" href="{% url 'show' pk=record.pk %}" role="button">Edit</a>
+    <input type="submit" value="Delete" class="btn btn-danger btn-sm">
+</form>

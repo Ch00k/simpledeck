@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+
+<html lang="en">
+    <head>
+        {% block title %}{{ title }}{% endblock %}
+
+        {% block css %}
+            <link rel="stylesheet" href="{% static 'reveal.css' %}">
+            <link rel="stylesheet" href="{% static 'league.css' %}">
+        {% endblock %}
+
+        {% block js %}
+            <script src="{% static 'ace.js' %}"></script>
+            <script src="{% static 'markdown.js' %}"></script>
+            <script src="{% static 'reveal.js' %}"></script>
+        {% endblock %}
+    </head>
+
+{% block content %}
+    <div class="row w-100 h-75">
+        <div class="col border" id="editor">{{ text }}</div>
+
+        <div class="col-sm-1 border" id="control">
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+                    <input type="text" class="form-control" id="{{ form.title.id_for_label }}"
+                        name="{{ form.title.html_name }}" value="{{ form.title.value|default_if_none:'' }}">
+                </div>
+                <div class="form-group">
+                    <input type="hidden" id="{{ form.text.id_for_label }}"
+                        name="{{ form.text.html_name }}" value="{{ form.text.value|default_if_none:'' }}">
+                </div>
+
+                <input type="submit" value="Save" class="btn btn-primary" onclick="updateTextField()">
+            </form>
+
+            <input type="submit" value="Redraw" class="btn btn-primary" onclick="updateSlides()">
+        </div>
+
+        <div class="col border" id="viewer">
+            <div class="reveal">
+                <div class="slides">
+                    <section data-markdown data-separator-vertical="^===" data-separator="^---">
+                        <textarea data-template>{{ text }}</textarea>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    function updateTextField() {
+        var el = document.getElementById("id_text");
+        el.value = editor.getValue();
+    }
+
+    function updateSlides() {
+        var el = document.getElementsByClassName("slides");
+        el[0].innerHTML = '<section data-markdown data-markdown data-separator-vertical="^===" data-separator="^---"><textarea data-template>'+editor.getValue()+'</textarea></section>';
+
+        Reveal.getPlugin('markdown').processSlides(document);
+        Reveal.getPlugin('markdown').convertSlides();
+        Reveal.sync();
+
+        <!--TODO: Toggling twice to set the present/future classes on slides-->
+        Reveal.toggleOverview();
+        Reveal.toggleOverview();
+    }
+
+    var editor = ace.edit(
+        "editor", {
+        mode: "ace/mode/markdown"
+    });
+
+    Reveal.initialize({
+        embedded: true,
+        controls: true,
+        plugins: [ RevealMarkdown ]
+    });
+{% endblock %}
+</html>

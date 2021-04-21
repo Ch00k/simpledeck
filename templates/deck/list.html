@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
+    <div class="row w-75 mx-auto">
+        <div class="col">
+            {% render_table table %}
+            <a class="btn btn-primary" href="{% url 'create' %}" role="button">Create new</a>
+        </div>
+    </div>
+{% endblock %}
