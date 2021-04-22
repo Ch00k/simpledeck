@@ -4,7 +4,6 @@ from django.views.generic import RedirectView, TemplateView
 from django_registration import forms
 from django_registration.backends.activation import views
 
-
 app_name = "simpledeck"
 handler404 = "simpledeck.views.handler404"
 

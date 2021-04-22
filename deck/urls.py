@@ -2,7 +2,6 @@ from django.urls import path
 
 from . import views
 
-
 urlpatterns = [
     path("", views.DeckListView.as_view(), name="list"),
     path("create/", views.show_create_update, name="create"),
