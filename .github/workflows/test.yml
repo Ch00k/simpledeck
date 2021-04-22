@@ -19,5 +19,8 @@ jobs:
         with:
           python-version: '3.9.x'
 
+      - name: install dependencies
+        run: make install_deps_dev
+
       - name: run linting
         run: make lint
