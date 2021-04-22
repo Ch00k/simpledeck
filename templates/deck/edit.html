@@ -1,19 +1,18 @@
 {% extends "base.html" %}
-{% load static %}
 
 <html lang="en">
     <head>
         {% block title %}{{ title }}{% endblock %}
 
         {% block css %}
-            <link rel="stylesheet" href="{% static 'reveal.css' %}">
-            <link rel="stylesheet" href="{% static 'league.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/reveal.min.css" integrity="sha512-zu0eodDPCBAZf1vnIgwZ6qchMBt1xqgGkS9vBjVmunoH8pU7cc9OQKBiSQCclpvqySupy9Y1pLZc87VB40G4Sw==" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/theme/league.min.css" integrity="sha512-AI3aXE9pwvZel0AhCQeQ4PdSe6IhGo4kXBgUBDlF5i/qhY+UDHh5vLWxegQzDaqusD/LgL23KoFISl4qklKXjw==" crossorigin="anonymous" />
         {% endblock %}
 
         {% block js %}
-            <script src="{% static 'ace.js' %}"></script>
-            <script src="{% static 'markdown.js' %}"></script>
-            <script src="{% static 'reveal.js' %}"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.min.js" integrity="sha512-GoORoNnxst42zE3rYPj4bNBm0Q6ZRXKNH2D9nEmNvVF/z24ywVnijAWVi/09iBiVDQVf3UlZHpzhAJIdd9BXqw==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/reveal.min.js" integrity="sha512-Xu/cezKABTI81MGnaBm64vdiS7XkttHeYGOgr2Mdga0bTplSBGongLq2lhK2HwL79wefKM0u4uTCLD0ha1sRzQ==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/plugin/markdown/markdown.min.js" integrity="sha512-eZZqO4ECmVvGhCt+6VZ7ian2bCu4S6yrjSFH9fXLY1zTokpAWsxAxQwM4x6+7G+G4ha5tFIe0jY0XjpBUqS49Q==" crossorigin="anonymous"></script>
         {% endblock %}
     </head>
 
