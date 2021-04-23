@@ -13,10 +13,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.str("SECRET_KEY")
+SECRET_KEY = env.str("SIMPLEDECK_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool("DEBUG", False)
+DEBUG = env.bool("SIMPLEDECK_DEBUG", False)
 
 ALLOWED_HOSTS: List[str] = ["*"]
 
@@ -139,9 +139,9 @@ LOGOUT_REDIRECT_URL = "login"
 SESSION_COOKIE_AGE = 30 * 60
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
-EMAIL_HOST = "mail.minuteware.net"
-EMAIL_PORT = 25
-EMAIL_HOST_USER = None
-EMAIL_HOST_PASSWORD = None
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = "ay@mntw.re"
+EMAIL_BACKEND = "simpledeck.backends.MailgunEmailBackend"
+MAILGUN_API_BASE_URL = env.str(
+    "SIMPLEDECK_MAILGUN_API_BASE_URL", "https://api.mailgun.net/v3"
+)
+MAILGUN_DOMAIN = env.str("SIMPLEDECK_MAILGUN_DOMAIN")
+MAILGUN_API_KEY = env.str("SIMPLEDECK_MAILGUN_API_KEY")
