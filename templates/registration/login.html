@@ -36,11 +36,11 @@
                         <button type="submit" class="btn btn-primary">Login</button>
                     </div>
                     <div class="col-auto mr-auto">
-                        <a href="/accounts/password-reset">Forgot password</a>
+                        <a href="{% url 'password_reset' %}">Forgot password</a>
                     </div>
                 </div>
             </form>
-            <div>Don't have an account? <a href="/accounts/register">Sign up</a></div>
+            <div>Don't have an account? <a href="{% url 'signup' %}">Sign up</a></div>
         </div>
     </div>
 
