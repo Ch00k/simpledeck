@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django_tables2 import SingleTableView
@@ -14,6 +15,10 @@ class DeckListView(LoginRequiredMixin, SingleTableView):
     table_class = DeckTable
     template_name = "deck/list.html"
     login_url = "/accounts/login/"
+
+    def get_queryset(self) -> QuerySet:
+        self.queryset = self.model._default_manager.filter(user=self.request.user)
+        return super().get_queryset()
 
 
 @login_required
@@ -30,7 +35,7 @@ def show_create_update(request: HttpRequest, pk: int = None) -> HttpResponse:
                 p.save()
                 return redirect("show", pk=p.pk)
             else:
-                p = get_object_or_404(Deck, pk=pk)
+                p = get_object_or_404(Deck, pk=pk, user=request.user)
                 p.title = title
                 p.text = text
                 p.save()
@@ -47,7 +52,7 @@ def show_create_update(request: HttpRequest, pk: int = None) -> HttpResponse:
             title = "New deck"
             text = ""
         else:
-            p = get_object_or_404(Deck, pk=pk)
+            p = get_object_or_404(Deck, pk=pk, user=request.user)
             title = p.title
             text = p.text
         form = CreateForm(initial={"title": title})
@@ -60,18 +65,21 @@ def show_create_update(request: HttpRequest, pk: int = None) -> HttpResponse:
 
 @login_required
 def present(request: HttpRequest, pk: int) -> HttpResponse:
-    p = get_object_or_404(Deck, pk=pk)
+    p = get_object_or_404(Deck, pk=pk, user=request.user)
     return render(request, "deck/present.html", {"title": p.title, "text": p.text})
 
 
 @login_required
 def delete(request: HttpRequest, pk: int) -> HttpResponse:
-    p = get_object_or_404(Deck, pk=pk)
+    p = get_object_or_404(Deck, pk=pk, user=request.user)
 
     if request.method == "POST":
         form = DeleteForm(request.POST, instance=p)
         if form.is_valid():
             p.delete()
             return redirect("list")
+        else:
+            return render(request, "deck/list.html")
+
     else:
         return redirect("list")
