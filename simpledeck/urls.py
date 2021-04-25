@@ -18,31 +18,31 @@ registration = [
         TemplateView.as_view(
             template_name="django_registration/activation_complete.html"
         ),
-        name="activation_complete",
+        name="django_registration_activation_complete",
     ),
     path(
         "accounts/activate/<str:activation_key>/",
         views.ActivationView.as_view(),
-        name="activate_account",
+        name="django_registration_activate",
     ),
     path(
         "accounts/register/",
         views.RegistrationView.as_view(form_class=forms.RegistrationFormUniqueEmail),
-        name="signup",
+        name="django_registration_register",
     ),
     path(
         "accounts/register/complete/",
         TemplateView.as_view(
             template_name="django_registration/registration_complete.html"
         ),
-        name="sugnup_complete",
+        name="django_registration_complete",
     ),
     path(
         "accounts/register/closed/",
         TemplateView.as_view(
             template_name="django_registration/registration_closed.html"
         ),
-        name="signup_disallowed",
+        name="django_registration_disallowed",
     ),
 ]
 
