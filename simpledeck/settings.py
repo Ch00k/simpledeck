@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import List
 
 from environs import Env
 
@@ -18,7 +17,7 @@ SECRET_KEY = env.str("SIMPLEDECK_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("SIMPLEDECK_DEBUG", False)
 
-ALLOWED_HOSTS: List[str] = ["*"]
+ALLOWED_HOSTS = env.list("SIMPLEDECK_ALLOWED_HOSTS", ["*"])
 
 
 # Application definition
@@ -136,6 +135,8 @@ ACCOUNT_ACTIVATION_DAYS = 7
 LOGIN_REDIRECT_URL = "list"
 LOGOUT_REDIRECT_URL = "login"
 
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_AGE = 30 * 60
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
