@@ -4,3 +4,4 @@ django-registration==3.1.2
 django-tables2==2.3.4
 environs==9.3.2
 requests==2.25.1
+sentry-sdk==1.0.0
