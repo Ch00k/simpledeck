@@ -1,6 +1,8 @@
 from pathlib import Path
 
+import sentry_sdk
 from environs import Env
+from sentry_sdk.integrations.django import DjangoIntegration
 
 env = Env()
 env.read_env()
@@ -147,3 +149,10 @@ MAILGUN_API_BASE_URL = env.str(
 )
 MAILGUN_DOMAIN = env.str("SIMPLEDECK_MAILGUN_DOMAIN")
 MAILGUN_API_KEY = env.str("SIMPLEDECK_MAILGUN_API_KEY")
+
+if not DEBUG:
+    sentry_sdk.init(
+        dsn=env.str("SIMPLEDECK_SENTRY_DSN"),
+        integrations=[DjangoIntegration()],
+        send_default_pii=True,
+    )
