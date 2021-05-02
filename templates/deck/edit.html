@@ -38,10 +38,6 @@
                 <input type="submit" value="Save" class="btn btn-primary btn-sm" onclick="updateTextField()">
             </form>
         </div>
-
-        <div class="col">
-            <input type="submit" value="Redraw" class="btn btn-primary btn-sm mx-4" onclick="updateSlides()">
-        </div>
     </div>
 
     <div class="row w-100 h-75">
@@ -82,6 +78,23 @@
     var editor = ace.edit(
         "editor", {
         mode: "ace/mode/markdown"
+    });
+
+    editor.session.on('change', function(delta) {
+        updateSlides();
+    });
+
+    editor.session.selection.on('changeCursor', function(e) {
+        currentRow = editor.selection.getCursor().currentRow;
+        var lines = editor.getValue().split("\n");
+        var currentSlide = 0;
+
+        for (var i = 0; i < lines.slice(0, currentRow + 1).length; i++) {
+            if (lines[i].trim() === "---") {
+               currentSlide += 1;
+            }
+        }
+        Reveal.slide(currentSlide);
     });
 
     Reveal.initialize({
