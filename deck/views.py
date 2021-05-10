@@ -29,21 +29,28 @@ def show_create_update(request: HttpRequest, pk: int = None) -> HttpResponse:
         if form.is_valid():
             title = form.cleaned_data["title"]
             text = form.cleaned_data["text"]
+            theme = form.cleaned_data["theme"]
 
             if pk is None:
-                p = Deck(title=title, text=text, user=request.user)
+                p = Deck(title=title, text=text, theme=theme, user=request.user)
                 p.save()
                 return redirect("show", pk=p.pk)
             else:
                 p = get_object_or_404(Deck, pk=pk, user=request.user)
                 p.title = title
                 p.text = text
+                p.theme = theme
                 p.save()
                 form = CreateForm(initial={"title": p.title})
                 return render(
                     request,
                     "deck/edit.html",
-                    {"title": p.title, "text": p.text, "form": form},
+                    {
+                        "title": p.title,
+                        "text": p.text,
+                        "theme": p.theme,
+                        "form": form,
+                    },
                 )
         else:
             return render(request, "deck/edit.html", {"form": form})
@@ -51,15 +58,22 @@ def show_create_update(request: HttpRequest, pk: int = None) -> HttpResponse:
         if pk is None:
             title = "New deck"
             text = ""
+            theme = "simple"
         else:
             p = get_object_or_404(Deck, pk=pk, user=request.user)
             title = p.title
             text = p.text
+            theme = p.theme
         form = CreateForm(initial={"title": title})
         return render(
             request,
             "deck/edit.html",
-            {"title": title, "text": text, "form": form},
+            {
+                "title": title,
+                "text": text,
+                "theme": theme,
+                "form": form,
+            },
         )
 
 

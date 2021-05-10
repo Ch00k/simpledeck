@@ -6,7 +6,7 @@
 
         {% block css %}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/reveal.min.css" integrity="sha512-zu0eodDPCBAZf1vnIgwZ6qchMBt1xqgGkS9vBjVmunoH8pU7cc9OQKBiSQCclpvqySupy9Y1pLZc87VB40G4Sw==" crossorigin="anonymous" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/theme/simple.min.css" integrity="sha512-BSa8t7bx4QmEpE/tM959gS4Vr/ySA486B8ZR+7KhaA3yNgSjVFOIZ8ahuc1Z6ik+E8qHz6m8q2MVrEJIb3FzMQ==" crossorigin="anonymous" id="theme" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/theme/simple.min.css" integrity="sha512-BSa8t7bx4QmEpE/tM959gS4Vr/ySA486B8ZR+7KhaA3yNgSjVFOIZ8ahuc1Z6ik+E8qHz6m8q2MVrEJIb3FzMQ==" crossorigin="anonymous" id="theme-source" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css" integrity="sha512-kZqGbhf9JTB4bVJ0G8HCkqmaPcRgo88F0dneK30yku5Y/dep7CZfCnNml2Je/sY4lBoqoksXz4PtVXS4GHSUzQ==" crossorigin="anonymous" />
         {% endblock %}
 
@@ -22,7 +22,7 @@
 {% block content %}
     <div class="row w-100">
         <div class="col">
-            <form class="form-inline mx-4" method="post">
+            <form class="form-inline mx-4 my-4" method="post">
                 {% csrf_token %}
 
                 <div class="form-group">
@@ -31,23 +31,16 @@
                         name="{{ form.title.html_name }}" value="{{ form.title.value|default_if_none:'' }}"
                         placeholder="Title">
                 </div>
-                <div class="form-group">
-                    <label>Theme</label>
-                    <select class="form-control" id="theme-control">
-                        <option>beige</option>
-                        <option>black</option>
-                        <option>blood</option>
-                        <option>league</option>
-                        <option>moon</option>
-                        <option>night</option>
-                        <option>serif</option>
-                        <option selected="selected">simple</option>
-                        <option>sky</option>
-                        <option>solarized</option>
-                        <option>white</option>
+
+                <div class="form-group mx-sm-3">
+                    <select class="form-control form-control-sm" id="theme-control" name="{{ form.theme.html_name }}">
+                        {% for value, name in form.fields.theme.choices %}
+                            <option {% if value == theme %}selected="selected"{% endif %} value="{{ value }}">{{ name }}</option>
+                        {% endfor %}
                     </select>
                 </div>
-                <div class="form-group mx-sm-1">
+
+                <div class="form-group">
                     <input type="hidden" id="{{ form.text.id_for_label }}"
                         name="{{ form.text.html_name }}" value="{{ form.text.value|default_if_none:'' }}">
                 </div>
@@ -89,7 +82,7 @@
             ["white", "sha512-4D8b66djW61D6twJNMNqyRrS8wCmCDyVQaME8E5CyGj2wRGsQUz6Y7qa2W0rEvYaaju9OHGxVPd173eBAaMAOQ=="]
         ]);
 
-        var elem = document.getElementById('theme');
+        var elem = document.getElementById('theme-source');
         var themeName = theme.options[theme.selectedIndex].text;
         elem.setAttribute('integrity', themeHashes.get(themeName));
         elem.setAttribute('href','https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/theme/' + themeName + '.min.css');
@@ -143,5 +136,6 @@
 
     var theme = document.getElementById('theme-control');
     theme.onchange = setTheme;
+    window.onload = setTheme();
 {% endblock %}
 </html>
