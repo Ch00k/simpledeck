@@ -16,7 +16,7 @@ class MailgunEmailBackend(BaseEmailBackend):
                 url,
                 auth=("api", settings.MAILGUN_API_KEY),
                 data={
-                    "from": f"SimpleDeck <accounts@{settings.EMAIL_FROM_DOMAIN}>",
+                    "from": f"SimpleDeck <noreply@{settings.MAILGUN_DOMAIN}>",
                     "to": m.to,
                     "subject": m.subject,
                     "text": m.body,
