@@ -16,12 +16,12 @@ class MailgunEmailBackend(BaseEmailBackend):
                 url,
                 auth=("api", settings.MAILGUN_API_KEY),
                 data={
-                    "from": f"SimpleDeck <accounts@{settings.MAILGUN_DOMAIN}>",
+                    "from": f"SimpleDeck <accounts@{settings.EMAIL_FROM_DOMAIN}>",
                     "to": m.to,
                     "subject": m.subject,
                     "text": m.body,
                 },
             )
-            count += resp.status_code == 200
-
+            resp.raise_for_status()
+            count += 1
         return count

@@ -145,10 +145,11 @@ SESSION_COOKIE_AGE = 30 * 60
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 EMAIL_BACKEND = "simpledeck.backends.MailgunEmailBackend"
+EMAIL_FROM_DOMAIN = "simpledeck.net"
 MAILGUN_API_BASE_URL = env.str(
     "SIMPLEDECK_MAILGUN_API_BASE_URL", "https://api.mailgun.net/v3"
 )
-MAILGUN_DOMAIN = env.str("SIMPLEDECK_MAILGUN_DOMAIN")
+MAILGUN_DOMAIN = env.str("SIMPLEDECK_MAILGUN_DOMAIN", "mail.simpledeck.net")
 MAILGUN_API_KEY = env.str("SIMPLEDECK_MAILGUN_API_KEY")
 
 if not DEBUG:
