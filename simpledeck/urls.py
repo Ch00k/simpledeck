@@ -4,6 +4,8 @@ from django.views.generic import RedirectView, TemplateView
 from django_registration import forms
 from django_registration.backends.activation import views
 
+from .views import demo as demo_view
+
 app_name = "simpledeck"
 handler404 = "simpledeck.views.handler404"
 
@@ -86,10 +88,15 @@ password_management = [
     ),
 ]
 
+demo = [
+    path("demo/", demo_view, name="demo"),
+]
+
 urlpatterns = (
     login
     + registration
     + password_management
+    + demo
     + [
         path("", RedirectView.as_view(url="decks/")),
         path("decks/", include("deck.urls")),

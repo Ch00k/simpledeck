@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+<html lang="en">
+    <head>
+        {% block title %}{{ title }}{% endblock %}
+
+        {% block css %}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/reveal.min.css" integrity="sha512-zu0eodDPCBAZf1vnIgwZ6qchMBt1xqgGkS9vBjVmunoH8pU7cc9OQKBiSQCclpvqySupy9Y1pLZc87VB40G4Sw==" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/theme/simple.min.css" integrity="sha512-BSa8t7bx4QmEpE/tM959gS4Vr/ySA486B8ZR+7KhaA3yNgSjVFOIZ8ahuc1Z6ik+E8qHz6m8q2MVrEJIb3FzMQ==" crossorigin="anonymous" id="theme-source" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css" integrity="sha512-kZqGbhf9JTB4bVJ0G8HCkqmaPcRgo88F0dneK30yku5Y/dep7CZfCnNml2Je/sY4lBoqoksXz4PtVXS4GHSUzQ==" crossorigin="anonymous" />
+        {% endblock %}
+
+        {% block js %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.min.js" integrity="sha512-GoORoNnxst42zE3rYPj4bNBm0Q6ZRXKNH2D9nEmNvVF/z24ywVnijAWVi/09iBiVDQVf3UlZHpzhAJIdd9BXqw==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-markdown.min.js" integrity="sha512-8euv05RhbuOcZWj/kpF+KtKN7g1CPx7buTZjIBf/rZQz47cduH3DERWoqJFrIYE0TzaIlptz+Ir2BodrmLT8kQ==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/reveal.min.js" integrity="sha512-Xu/cezKABTI81MGnaBm64vdiS7XkttHeYGOgr2Mdga0bTplSBGongLq2lhK2HwL79wefKM0u4uTCLD0ha1sRzQ==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/plugin/markdown/markdown.min.js" integrity="sha512-eZZqO4ECmVvGhCt+6VZ7ian2bCu4S6yrjSFH9fXLY1zTokpAWsxAxQwM4x6+7G+G4ha5tFIe0jY0XjpBUqS49Q==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/plugin/highlight/highlight.min.js" integrity="sha512-NA5UCab7xDKQPXGsmIp8iEuId5BAKGPiqHZsZQcBuySfp1n3dZrwBDKpPNL23Db5upay1nULxU14JV1ggFOD2A==" crossorigin="anonymous"></script>
+        {% endblock %}
+    </head>
+
+{% block content %}
+    <div class="row w-100">
+        <div class="col">
+            <form class="form-inline mx-4 my-4">
+                <div class="form-group mx-sm-3">
+                    <select class="form-control form-control-sm" id="theme-control" name="{{ form.theme.html_name }}">
+                        {% for value, name in themes %}
+                            <option {% if value == "simple" %}selected="selected"{% endif %} value="{{ value }}">{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row w-100 h-75">
+        <div class="col" id="editor">{% include 'demo.md' %}</div>
+
+        <div class="col" id="viewer">
+            <div class="reveal">
+                <div class="slides">
+                    <section data-markdown data-separator-vertical="^===" data-separator="^---">
+                        <textarea data-template>{{ text }}</textarea>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    function setTheme() {
+        var themeHashes = new Map([
+            ["beige", "sha512-6dnJccFGiMOI9WiU1gQ7QjA6ShSBExdRRLiOAqdRbx0VmiF7AGBk5aL1kl9hCTTVuX3wmyOxUkNOrbPlHi3CRQ=="],
+            ["black", "sha512-zB0aIw1hR3hViObaUdwCG3ICqkblcZFhSLursL3P8mAqFJQvItchD/FoXo539E1lUZTqC/cTxmugRp1b5NsQRA=="],
+            ["blood", "sha512-pQfexUrxiNMPY798awt05XLi+qOqvCsaprDleLbHYEktyAd5bOw4Jp3y51vC/helqEbZ28v26Fe3waJ2gu1rlw=="],
+            ["league", "sha512-AI3aXE9pwvZel0AhCQeQ4PdSe6IhGo4kXBgUBDlF5i/qhY+UDHh5vLWxegQzDaqusD/LgL23KoFISl4qklKXjw=="],
+            ["moon", "sha512-FdOMqolteRx3Rald9kDK9xbGJnmhrqIdAGARCG5sV0UvzlnHjpd0Z5Siw8RjMBkZNLLZi1IxxJAFuDXLQJf9JQ=="],
+            ["night", "sha512-kUvEY90IMFRvVVJhTFb0Ad49g0zu+7mNFwDmy4SKoOQNfJVU5KSvmly0vlrFVuo+yr4UqQ9fWSP2h3q4eCx7hw=="],
+            ["serif", "sha512-zfUwfaFoyRFWvuz9PWX2Dmw8XcLwBjxg6m+UIu4Pe806UsCkwg6GI1eN1pZ6pMZsJORb75Neu/bgFV3wzrHIyQ=="],
+            ["simple", "sha512-BSa8t7bx4QmEpE/tM959gS4Vr/ySA486B8ZR+7KhaA3yNgSjVFOIZ8ahuc1Z6ik+E8qHz6m8q2MVrEJIb3FzMQ=="],
+            ["sky", "sha512-qlbKF6oJNH9njJbSmGuu/o1Faflj51PCyW/aW9oUMBtuZIJNO/+gJx7Fpzpy1I0jfLrLA2k8Y54ZtgktEd+bVg=="],
+            ["solarized", "sha512-KajvYx0LNr6yNP0EYF2HDtho+s/YIJixStwpbnSmbtqbxuqTZYFdQm/L2XhBhIpvu+zdyrI4cRnzWjCJ3z1IZA=="],
+            ["white", "sha512-4D8b66djW61D6twJNMNqyRrS8wCmCDyVQaME8E5CyGj2wRGsQUz6Y7qa2W0rEvYaaju9OHGxVPd173eBAaMAOQ=="]
+        ]);
+
+        var elem = document.getElementById('theme-source');
+        var themeName = theme.options[theme.selectedIndex].text;
+        elem.setAttribute('integrity', themeHashes.get(themeName));
+        elem.setAttribute('href','https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/theme/' + themeName + '.min.css');
+    }
+
+    function updateTextField() {
+        var el = document.getElementById("id_text");
+        el.value = editor.getValue();
+    }
+
+    function updateSlides() {
+        var el = document.getElementsByClassName("slides");
+        el[0].innerHTML = '<section data-markdown data-markdown data-separator-vertical="^===" data-separator="^---"><textarea data-template>'+editor.getValue()+'</textarea></section>';
+
+        Reveal.getPlugin('markdown').processSlides(document);
+        Reveal.getPlugin('markdown').convertSlides();
+        Reveal.sync();
+
+        <!--TODO: Toggling twice to set the present/future classes on slides-->
+        Reveal.toggleOverview();
+        Reveal.toggleOverview();
+    }
+
+    var editor = ace.edit(
+        "editor", {
+        mode: "ace/mode/markdown"
+    });
+
+    editor.session.on('change', function(delta) {
+        updateSlides();
+    });
+
+    editor.session.selection.on('changeCursor', function(e) {
+        currentRow = editor.selection.getCursor().row;
+        var lines = editor.getValue().split("\n");
+        var currentSlide = 0;
+
+        for (var i = 0; i < lines.slice(0, currentRow + 1).length; i++) {
+            if (lines[i].trim() === "---") {
+               currentSlide += 1;
+            }
+        }
+        Reveal.slide(currentSlide);
+    });
+
+    Reveal.initialize({
+        embedded: true,
+        controls: true,
+        plugins: [ RevealMarkdown, RevealHighlight ]
+    });
+
+    var theme = document.getElementById('theme-control');
+    theme.onchange = setTheme;
+    window.onload = function(){
+        updateSlides();
+        setTheme();
+    };
+{% endblock %}
+</html>
